@@ -38,11 +38,10 @@ jobs:
           mkdir -p "$dest_dir/Pure"
           ${sketchtool} export slices "Pure.sketch" --output="$dest_dir/Pure"
 
-      - name: ImageMagick action
+      - name: Convert png to icns
         uses: jruipinto/ImageMagick-action@v1
         with:
-          # ImageMagick command to be executed
-          command: magick mogrify -format icns *.png
+          command: mogrify -format icns *.png
 
       # Upload the output images as an artifact
       - name: Upload Exported Images
