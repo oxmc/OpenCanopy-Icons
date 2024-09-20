@@ -51,11 +51,25 @@ jobs:
           
           # Convert PNG files to ICNS (Jianfengzhi)
           mkdir -p "$dest_dir/Jianfengzhi"
-          png2icns "$dest_dir/Jianfengzhi/*.icns" "$src_dir/Jianfengzhi/*.png"
+          # Loop through PNG files and convert them to ICNS
+          for png_file in $src_dir/Jianfengzhi/*.png; do
+            # Extract the base name (without extension) of the PNG file
+            base_name=$(basename "$png_file" .png)
+
+            # Convert PNG to ICNS and save it with the same base name
+            png2icns "$dest_dir/Jianfengzhi/${base_name}.icns" "$png_file"
+          done
 
           # Convert PNG files to ICNS (Pure)
           mkdir -p "$dest_dir/Pure"
-          png2icns "$dest_dir/Pure/*.icns" "$src_dir/Pure/*.png"
+          # Loop through PNG files and convert them to ICNS
+          for png_file in $src_dir/Pure/*.png; do
+            # Extract the base name (without extension) of the PNG file
+            base_name=$(basename "$png_file" .png)
+
+            # Convert PNG to ICNS and save it with the same base name
+            png2icns "$dest_dir/Pure/${base_name}.icns" "$png_file"
+          done
 
       # Upload the output images as an artifact
       - name: Upload Exported Images
