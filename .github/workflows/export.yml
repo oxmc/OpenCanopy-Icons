@@ -19,7 +19,7 @@ jobs:
         run: |
           set -xeu
           [[ -x sketchtool/bin/sketchtool ]] && exit 0
-          curl -L -o sketch.zip http://www.sketchapp.com/static/download/sketch.zip
+          curl -L -o sketch.zip https://download.sketch.com/sketch-100.3-180165.zip
           unzip -qo sketch.zip
           cp -rp Sketch.app/Contents/Resources/sketchtool .
 
@@ -28,11 +28,15 @@ jobs:
         run: |
           #!/bin/bash
           dest_dir="out/images"
-          file_name="images.sketch"
           sketchtool=./sketchtool/bin/sketchtool
 
-          mkdir -p "$dest_dir"
-          ${sketchtool} export slices "$file_name" --output="$dest_dir"
+          # Export Jianfengzhi.sketch
+          mkdir -p "$dest_dir/Jianfengzhi"
+          ${sketchtool} export slices "Jianfengzhi.sketch" --output="$dest_dir/Jianfengzhi"
+
+          # Export Pure.sketch
+          mkdir -p "$dest_dir/Pure"
+          ${sketchtool} export slices "Pure.sketch" --output="$dest_dir/Pure"
 
       # Upload the output images as an artifact
       - name: Upload Exported Images
