@@ -23,11 +23,16 @@ jobs:
           unzip -qo sketch.zip
           #cp -rp Sketch.app/Contents/Resources/sketchtool/bin/sketchtool ./sketchtool
 
+      - name: Install libicns
+        uses: ConorMacBride/install-package@v1
+        with:
+          brew: libicns
+
       # Export and Import Images using the sketchtool export
       - name: Export Images from Sketch
         run: |
           #!/bin/bash
-          dest_dir="out/images"
+          dest_dir="out/png"
           sketchtool=Sketch.app/Contents/Resources/sketchtool/bin/sketchtool
 
           # Export Jianfengzhi.sketch
@@ -39,9 +44,18 @@ jobs:
           ${sketchtool} export slices "Pure.sketch" --output="$dest_dir/Pure"
 
       - name: Convert png to icns
-        uses: jruipinto/ImageMagick-action@v1
-        with:
-          command: mogrify -format icns *.png
+        run: |
+          #!/bin/bash
+          src_dir="out/png"
+          dest_dir="out/icns"
+          
+          # Convert PNG files to ICNS (Jianfengzhi)
+          mkdir -p "$dest_dir/Jianfengzhi"
+          png2icns "$dest_dir/Jianfengzhi/*.icns" "$src_dir/Jianfengzhi/*.png"
+
+          # Convert PNG files to ICNS (Pure)
+          mkdir -p "$dest_dir/Pure"
+          png2icns "$dest_dir/Pure/*.icns" "$src_dir/Pure/*.png"
 
       # Upload the output images as an artifact
       - name: Upload Exported Images
