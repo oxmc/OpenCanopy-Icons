@@ -62,7 +62,7 @@ jobs:
             ./png_to_icns.sh -i "$png_file"
 
             # Move file to dest_dir
-            mv "./$base_name.icns" "$dest_dir/Jianfengzhi/"
+            mv "./icon.icns" "$dest_dir/Jianfengzhi/"
           done
 
           # Convert PNG files to ICNS (Pure)
@@ -76,7 +76,7 @@ jobs:
             ./png_to_icns.sh -i "$png_file"
 
             # Move file to dest_dir
-            mv "./$base_name.icns" "$dest_dir/Pure/"
+            mv "./icon.icns" "$dest_dir/Pure/"
           done
 
       # Upload the output images as an artifact
