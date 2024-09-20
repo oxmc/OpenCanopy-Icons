@@ -1,0 +1,45 @@
+name: macOS CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install Sketch dependencies (sketchtool install)
+      - name: Install Sketch tool
+        run: |
+          set -xeu
+          [[ -x sketchtool/bin/sketchtool ]] && exit 0
+          curl -L -o sketch.zip http://www.sketchapp.com/static/download/sketch.zip
+          unzip -qo sketch.zip
+          cp -rp Sketch.app/Contents/Resources/sketchtool .
+
+      # Export and Import Images using the sketchtool export
+      - name: Export Images from Sketch
+        run: |
+          #!/bin/bash
+          dest_dir="out/images"
+          file_name="images.sketch"
+          sketchtool=./sketchtool/bin/sketchtool
+
+          mkdir -p "$dest_dir"
+          ${sketchtool} export slices "$file_name" --output="$dest_dir"
+
+      # Upload the output images as an artifact
+      - name: Upload Exported Images
+        uses: actions/upload-artifact@v3
+        with:
+          name: exported-images
+          path: out/images
+          if-no-files-found: error  # Options: warn, error, ignore
+          retention-days: 30        # Retain the artifact for 30 days
+          include-hidden-files: false  # Do not include hidden files
