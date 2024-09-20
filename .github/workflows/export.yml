@@ -23,10 +23,12 @@ jobs:
           unzip -qo sketch.zip
           #cp -rp Sketch.app/Contents/Resources/sketchtool/bin/sketchtool ./sketchtool
 
-      - name: Install libicns
-        uses: ConorMacBride/install-package@v1
-        with:
-          brew: libicns
+      # Download the png_to_icns script
+      - name: Download png_to_icns script
+        run: |
+          curl -L -o png_to_icns.sh https://github.com/BenSouchet/png-to-icns/raw/refs/heads/main/png_to_icns.sh
+          # Make it executable
+          chmod +x png_to_icns.sh
 
       # Export and Import Images using the sketchtool export
       - name: Export Images from Sketch
@@ -56,8 +58,11 @@ jobs:
             # Extract the base name (without extension) of the PNG file
             base_name=$(basename "$png_file" .png)
 
-            # Convert PNG to ICNS and save it with the same base name
-            png2icns "$dest_dir/Jianfengzhi/${base_name}.icns" "$png_file"
+            # Convert PNG to ICNS
+            ./png_to_icns.sh -i "$png_file"
+
+            # Move file to dest_dir
+            mv "./$base_name.icns" "$dest_dir/Jianfengzhi/"
           done
 
           # Convert PNG files to ICNS (Pure)
@@ -67,8 +72,11 @@ jobs:
             # Extract the base name (without extension) of the PNG file
             base_name=$(basename "$png_file" .png)
 
-            # Convert PNG to ICNS and save it with the same base name
-            png2icns "$dest_dir/Pure/${base_name}.icns" "$png_file"
+            # Convert PNG to ICNS
+            ./png_to_icns.sh -i "$png_file"
+
+            # Move file to dest_dir
+            mv "./$base_name.icns" "$dest_dir/Pure/"
           done
 
       # Upload the output images as an artifact
