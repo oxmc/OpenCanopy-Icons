@@ -21,7 +21,6 @@ jobs:
           [[ -x sketchtool/bin/sketchtool ]] && exit 0
           curl -L -o sketch.zip https://download.sketch.com/sketch-100.3-180165.zip
           unzip -qo sketch.zip
-          #cp -rp Sketch.app/Contents/Resources/sketchtool/bin/sketchtool ./sketchtool
 
       # Download the png_to_icns script
       - name: Download png_to_icns script
@@ -84,7 +83,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: exported-images
-          path: out/images
+          path: out/
           if-no-files-found: error  # Options: warn, error, ignore
           retention-days: 30        # Retain the artifact for 30 days
           include-hidden-files: false  # Do not include hidden files
